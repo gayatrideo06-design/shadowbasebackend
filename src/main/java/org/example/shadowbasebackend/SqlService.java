@@ -10,28 +10,26 @@ import java.util.Map;
 public class SqlService {
 
     private final JdbcTemplate jdbcTemplate;
+    private final KafkaProducerService producer;
 
-    public SqlService(JdbcTemplate jdbcTemplate) {
+    public SqlService(JdbcTemplate jdbcTemplate,
+                      KafkaProducerService producer) {
         this.jdbcTemplate = jdbcTemplate;
+        this.producer = producer;
     }
 
-    public Object execute(String sql) {
-
+    public String execute(String sql) {
         try {
-
-            if (sql.trim().toLowerCase().startsWith("select")) {
-                List<Map<String, Object>> result =
-                        jdbcTemplate.queryForList(sql);
-
-                return result;
-            }
-
             jdbcTemplate.execute(sql);
-            return "Migration Successful";
 
+            producer.sendSql(sql);
+
+            return "Migration Successful";
         } catch (Exception e) {
             e.printStackTrace();
             return "Migration Failed: " + e.getMessage();
         }
     }
 }
+
+
