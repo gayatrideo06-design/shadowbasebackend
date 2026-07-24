@@ -22,7 +22,9 @@ public class SqlService {
         try {
             jdbcTemplate.execute(sql);
 
+            System.out.println("Sending SQL to Kafka...");
             producer.sendSql(sql);
+            System.out.println("SQL sent to Kafka.");
 
             return "Migration Successful";
         } catch (Exception e) {
@@ -30,6 +32,7 @@ public class SqlService {
             return "Migration Failed: " + e.getMessage();
         }
     }
-}
+        }
+
 
 
