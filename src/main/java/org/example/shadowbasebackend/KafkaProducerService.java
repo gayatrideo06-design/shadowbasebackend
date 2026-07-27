@@ -13,6 +13,12 @@ public class KafkaProducerService {
     }
 
     public void sendSql(String sql) {
-        kafkaTemplate.send("shadow-topic", sql);
+        try {
+            kafkaTemplate.send("shadow-topic", sql).get();
+            System.out.println("Kafka message sent successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Kafka send failed", e);
+        }
     }
 }

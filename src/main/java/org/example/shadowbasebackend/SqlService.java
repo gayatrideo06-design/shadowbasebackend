@@ -20,19 +20,19 @@ public class SqlService {
 
     public String execute(String sql) {
         try {
-            jdbcTemplate.execute(sql);
-
             System.out.println("Sending SQL to Kafka...");
             producer.sendSql(sql);
             System.out.println("SQL sent to Kafka.");
 
-            return "Migration Successful";
+
+            return "SQL sent to Kafka.";
         } catch (Exception e) {
             e.printStackTrace();
-            return "Migration Failed: " + e.getMessage();
+            return "Kafka send failed: " + e.getMessage();
         }
     }
-        }
+    }
+
 
 
 
